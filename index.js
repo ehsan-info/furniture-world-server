@@ -90,9 +90,24 @@ async function run() {
             res.send(result);
         });
 
+        app.get('/homecategories', async (req, res) => {
+            const query = {};
+            const options = {
+                sort: { category_title: -1 }
+            };
+            const categories = await categoriesCollection.find(query, options).limit(3).toArray();
+            res.send(categories);
+        });
+
         app.get('/products', async (req, res) => {
             const query = {}
             const products = await productsCollection.find(query).toArray();
+            res.send(products);
+        });
+
+        app.get('/advertisedproducts', async (req, res) => {
+            const query = { advertised: "advertised", available: "available" };
+            const products = await productsCollection.find(query).limit(3).toArray();
             res.send(products);
         });
 
