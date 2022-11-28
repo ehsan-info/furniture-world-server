@@ -35,7 +35,14 @@ function verifyJWT(req, res, next) {
 async function run() {
     try {
         const usersCollection = client.db("furnitureWorld").collection("users");
+        const categoriesCollection = client.db("furnitureWorld").collection("categories");
+        const productsCollection = client.db("furnitureWorld").collection("products");
 
+        app.get('/categories', async (req, res) => {
+            const query = {};
+            const result = await categoriesCollection.find(query).project({ category_title: 1, _id: 1 }).toArray();
+            res.send(result);
+        });
 
         app.get('/jwt', async (req, res) => {
             const email = req.query.email;
@@ -80,6 +87,12 @@ async function run() {
             const user = req.body;
             console.log(user);
             const result = await usersCollection.insertOne(user);
+            res.send(result);
+        });
+
+        app.post('/addproduct', async (req, res) => {
+            const product = req.body;
+            const result = await productsCollection.insertOne(product);
             res.send(result);
         });
     }
