@@ -44,6 +44,11 @@ async function run() {
             res.send(result);
         });
 
+        app.get('/catCategories', async (req, res) => {
+            const query = {};
+            const result = await categoriesCollection.find(query).project({ category_title: 1, _id: 1 }).toArray();
+            res.send(result);
+        });
         app.get('/jwt', async (req, res) => {
             const email = req.query.email;
             const query = { email: email }
@@ -131,6 +136,20 @@ async function run() {
             const updatedDoc = {
                 $set: {
                     available: 'sold'
+                }
+            }
+            const result = await productsCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        });
+        app.put('/products/promote/:id', async (req, res) => {
+            const id = req.params.id;
+            const state = req.body;
+            console.log(id, state);
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    advertised: state.advertised
                 }
             }
             const result = await productsCollection.updateOne(filter, updatedDoc, options);
