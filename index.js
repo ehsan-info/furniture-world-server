@@ -75,6 +75,61 @@ async function run() {
             res.send(users);
         });
 
+        //for all seller
+        app.get('/allseller', async (req, res) => {
+            const query = { role: 'seller' };
+            const users = await usersCollection.find(query).toArray();
+            res.send(users);
+        });
+        app.delete('/allseller/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await usersCollection.deleteOne(filter);
+            res.send(result);
+        });
+
+        app.put('/allseller/status/:id', async (req, res) => {
+            const id = req.params.id;
+            const state = req.body;
+            console.log(id, state);
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    status: state.status
+                }
+            }
+            const result = await usersCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        });
+
+        //for all buyer
+        app.get('/allbuyer', async (req, res) => {
+            const query = { role: 'buyer' };
+            const users = await usersCollection.find(query).toArray();
+            res.send(users);
+        });
+        app.delete('/allbuyer/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await usersCollection.deleteOne(filter);
+            res.send(result);
+        });
+
+        app.put('/allbuyer/status/:id', async (req, res) => {
+            const id = req.params.id;
+            const state = req.body;
+            console.log(id, state);
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    status: state.status
+                }
+            }
+            const result = await usersCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        });
         app.get('/users/admin/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email };
