@@ -44,6 +44,13 @@ async function run() {
             res.send(result);
         });
 
+        app.get('/categories/catproducts/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { product_category: id };
+            const products = await productsCollection.find(query).toArray();
+            res.send(products);
+        });
+
         app.get('/catCategories', async (req, res) => {
             const query = {};
             const result = await categoriesCollection.find(query).project({ category_title: 1, _id: 1 }).toArray();
