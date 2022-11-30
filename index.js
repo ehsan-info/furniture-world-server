@@ -116,6 +116,14 @@ async function run() {
             const products = await productsCollection.find(query).toArray();
             res.send(products);
         });
+        app.get('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const query = { _id: ObjectId(id) };
+            const products = await productsCollection.find(query).toArray();
+            console.log(products);
+            res.send(products);
+        });
 
         app.get('/products/:email', async (req, res) => {
             const email = req.params.email;
