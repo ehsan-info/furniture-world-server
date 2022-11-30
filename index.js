@@ -110,6 +110,13 @@ async function run() {
             res.send(products);
         });
 
+        app.get('/products/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { seller_email: email };
+            const products = await productsCollection.find(query).toArray();
+            res.send(products);
+        });
+
         app.get('/advertisedproducts', async (req, res) => {
             const query = { advertised: "advertised", available: "available" };
             const products = await productsCollection.find(query).limit(3).toArray();
