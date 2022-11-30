@@ -37,6 +37,7 @@ async function run() {
         const usersCollection = client.db("furnitureWorld").collection("users");
         const categoriesCollection = client.db("furnitureWorld").collection("categories");
         const productsCollection = client.db("furnitureWorld").collection("products");
+        const ordersCollection = client.db("furnitureWorld").collection("orders");
 
         app.get('/categories', async (req, res) => {
             const query = {};
@@ -175,6 +176,23 @@ async function run() {
                 }
             }
             const result = await productsCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        });
+        app.get('/orders/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { buyer_email: email };
+            const products = await ordersCollection.find(query).toArray();
+            res.send(products);
+        });
+        app.delete('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await ordersCollection.deleteOne(filter);
+            res.send(result);
+        });
+        app.post('/order', async (req, res) => {
+            const order = req.body;
+            const result = await ordersCollection.insertOne(order);
             res.send(result);
         });
     }
